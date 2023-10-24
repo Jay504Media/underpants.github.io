@@ -21,6 +21,9 @@ var _ = {};
 *   _.identity({a: "b"}) === {a: "b"}
 */
 
+_.identity = function(value) {
+    return value;
+};
 
 /** _.typeOf
 * Arguments:
@@ -42,6 +45,11 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
+_.typeof = function(value) {
+    if (Array.isArray(value)) {
+        
+    }
+}
 
 /** _.first
 * Arguments:
@@ -243,7 +251,14 @@ var _ = {};
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
-
+_.every = function(collection, func) {
+    if (Array.isArray(collection)) {
+        if (func === undefined) {
+    } else {
+     
+    }
+}
+}
 /** _.some
 * Arguments:
 *   1) A collection
