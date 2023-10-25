@@ -46,9 +46,21 @@ _.identity = function(value) {
 */
 
 _.typeof = function(value) {
-    if (Array.isArray(value)) {
-        
-    }
+    if (typeof value === 'string') {
+        return 'string';
+   } else if (Array.isArray(value)) {
+        return 'array';
+   } else if (typeof value === 'object' && value !== null) {
+        return 'object';
+   } else if (typeof value === 'undefined') {
+    return 'undefined';
+   } else if (typeof value === 'number') {
+    return 'number';
+   } else if (typeof value === 'boolean') {
+    return 'boolean';
+   } else {
+    return  'unknown';
+   }
 }
 
 /** _.first
@@ -256,6 +268,8 @@ _.every = function(collection, func) {
         if (func === undefined) {
     } else {
      
+    } for (var key in collection) {
+        func(collection[key], key, collection);
     }
 }
 }
