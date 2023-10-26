@@ -314,6 +314,25 @@ _.every = function(collection, func) {
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
+_.reduce = function(array, func, seed) {
+    let result;
+ if (seed === undefined) {
+
+ } else {
+    result = seed;
+    for (let i = 0; i < array.length; i++) {
+        result = func(result, array[i], i);
+    }
+ }
+
+
+
+
+    return result;
+}
+
+
+_.reduce([1, 2, 3], fu)
 
 /** _.extend
 * Arguments:
