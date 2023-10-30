@@ -45,12 +45,14 @@ _.identity = function(value) {
 * _.typeOf([1,2,3]) -> "array"
 */
 
-_.typeof = function(value) {
+_.typeOf = function(value) {
     if (typeof value === 'string') {
         return 'string';
    } else if (Array.isArray(value)) {
         return 'array';
-   } else if (typeof value === 'object' && value !== null) {
+    } else if ( value === null) {
+        return 'null';
+   } else if (typeof value === 'object') {
         return 'object';
    } else if (typeof value === 'undefined') {
     return 'undefined';
@@ -58,9 +60,12 @@ _.typeof = function(value) {
     return 'number';
    } else if (typeof value === 'boolean') {
     return 'boolean';
+   } else if (typeof value === 'function') {
+    return 'function';
    } else {
-    return  'unknown';
+    return 'unknown';
    }
+
 }
 
 /** _.first
@@ -81,6 +86,21 @@ _.typeof = function(value) {
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 */
 
+_.first = function(array, number) {
+    if (!Array.isArray(array)) {
+        return [];
+    }
+    if (typeof number !== 'number') {
+        return array[0];
+    }
+    if (number < 0) {
+        return [];
+    }
+    if (number > array.length) {
+        return array;
+    }
+    return array.slice(0, number);
+}
 
 /** _.last
 * Arguments:
@@ -100,6 +120,21 @@ _.typeof = function(value) {
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 */
 
+_.last = function(array, number) {
+    if (!Array.isArray(array)) {
+        return [];
+    }
+    if (typeof number !== 'number' ||isNaN(number)) {
+        return array[array.length - 1];
+    }
+    if (number < 0) {
+        return [];
+    }
+    if (number >= array.length) {
+        return array.slice();
+    }
+    return array.slice( - number);
+}
 
 /** _.indexOf
 * Arguments:
@@ -117,7 +152,14 @@ _.typeof = function(value) {
 *   _.indexOf(["a","b","c"], "d") -> -1
 */
 
-
+_.indexOf = function(array, value) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === value) {
+            return i;
+        }
+    }
+    return - 1
+}
 /** _.contains
 * Arguments:
 *   1) An array
@@ -263,16 +305,7 @@ _.typeof = function(value) {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
-_.every = function(collection, func) {
-    if (Array.isArray(collection)) {
-        if (func === undefined) {
-    } else {
-     
-    } for (var key in collection) {
-        func(collection[key], key, collection);
-    }
-}
-}
+
 /** _.some
 * Arguments:
 *   1) A collection
@@ -314,25 +347,6 @@ _.every = function(collection, func) {
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
-_.reduce = function(array, func, seed) {
-    let result;
- if (seed === undefined) {
-
- } else {
-    result = seed;
-    for (let i = 0; i < array.length; i++) {
-        result = func(result, array[i], i);
-    }
- }
-
-
-
-
-    return result;
-}
-
-
-_.reduce([1, 2, 3], fu)
 
 /** _.extend
 * Arguments:
