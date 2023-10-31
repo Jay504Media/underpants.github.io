@@ -175,7 +175,9 @@ _.indexOf = function(array, value) {
 *   _.contains([1,"two", 3.14], "two") -> true
 */
 
-
+_.contains = function(array, value) {
+    return array.includes(value) ? true: false;
+}
 /** _.each
 * Arguments:
 *   1) A collection
@@ -192,7 +194,17 @@ _.indexOf = function(array, value) {
 *      -> should log "a" "b" "c" to the console
 */
 
-
+_.each = function(collection, func) {
+    if(Array.isArray(collection)) {
+        for(var i = 0; i < collection.length; i++) {
+            func(collection[i], i, collection);
+        }
+    } else {
+        for (var key in collection) {
+      func(collection[key], key, collection);
+        }
+    }
+};
 /** _.unique
 * Arguments:
 *   1) An array
@@ -203,7 +215,15 @@ _.indexOf = function(array, value) {
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
 */
 
-
+_.unique = function(array) {
+    let result = [];
+    for (let i= 0; i < array.length; i++) {
+        if (result.indexOf(array[i]) === -1) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
 /** _.filter
 * Arguments:
 *   1) An array
@@ -220,7 +240,16 @@ _.indexOf = function(array, value) {
 *   use _.each in your implementation
 */
 
-
+_.filter = function(array, func) {
+    let result = [];
+    _.each(array, function(element, index, array) {
+      if (func(element, index, array)) {
+        result.push(element)
+      }
+    });
+      return result;
+    
+}
 /** _.reject
 * Arguments:
 *   1) An array
@@ -234,7 +263,11 @@ _.indexOf = function(array, value) {
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
 */
 
-
+_.reject = function(array, func) {
+    return array.filter(function(element, index, array) {
+        return !func(element, index, array);
+    });
+}
 /** _.partition
 * Arguments:
 *   1) An array
@@ -254,7 +287,20 @@ _.indexOf = function(array, value) {
 }
 */
 
-
+_.partition = function(array, func) {
+    let truthy = [];
+    let falsy = [];
+    for (let i = 0; i < array.length; i++) {
+        let element = array[i];
+        let key = i;
+        if (func(element, key, array)) {
+            truthy.push(element);
+        } else{
+            falsy.push(element);
+        }
+    } return [truthy, falsy];
+   
+}
 /** _.map
 * Arguments:
 *   1) A collection
@@ -271,7 +317,19 @@ _.indexOf = function(array, value) {
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
 
-
+_.map = function(collection, func) {
+    if (Array.isArray(collection)) {
+        return collection.map(func);
+    } else if (typeof collection === 'object') {
+        var result = [];
+        for (var key in collection) {
+            if (collection.hasOwnProperty(key)) {
+  result.push(func(collection[key], key, collection));
+            }
+        }
+        return result;
+    }
+}
 /** _.pluck
 * Arguments:
 *   1) An array of objects
@@ -283,7 +341,11 @@ _.indexOf = function(array, value) {
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
-
+_.pluck = function(array, property) {
+    return array.map(function(obj) {
+        return obj[property];
+    });
+}
 /** _.every
 * Arguments:
 *   1) A collection
@@ -305,7 +367,37 @@ _.indexOf = function(array, value) {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
-
+_.every = function(collection, func) {
+    if (Array.isArray(collection)){
+        if (typeof func === 'function') {
+            return collection.every(func);
+        } else {
+            return collection.every(function(element) {
+                return Boolean(element);
+            });
+        }
+    } else if (typeof collection === 'object') {
+        if (typeof func === 'function') {
+            for (var key in collection) {
+        if (collection.hasOwnProperty(key)) {
+            if (!func(collection[key], key, collection)) {
+                return false;
+            }
+        }
+            }
+            return true;
+        } else {
+            for (var key in collection) {
+                if (collection.hasOwnProperty(key)) {
+                    if (!Boolean(collection[key])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+}
 /** _.some
 * Arguments:
 *   1) A collection
@@ -327,7 +419,37 @@ _.indexOf = function(array, value) {
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
 
-
+_.some = function(collection, func) {
+    if (Array.isArray(collection)){
+        if (typeof func === 'function') {
+            return collection.some(func);
+        } else {
+            return collection.some(function(element) {
+                return Boolean(element);
+            });
+        }
+    } else if (typeof collection === 'object') {
+        if (typeof func === 'function') {
+            for (var key in collection) {
+        if (collection.hasOwnProperty(key)) {
+            if (!func(collection[key], key, collection)) {
+                return true;
+            }
+        }
+            }
+            return false;
+        } else {
+            for (var key in collection) {
+                if (collection.hasOwnProperty(key)) {
+                    if (!Boolean(collection[key])) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+}
 /** _.reduce
 * Arguments:
 *   1) An array
@@ -347,7 +469,13 @@ _.indexOf = function(array, value) {
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
-
+_.reduce = function(array, func, seed) {
+    let result = seed === undefined ? array[0] : seed;
+    for (let i = seed === undefined ? 1 : 0; i < array.length; i++) {
+        result = func(result, array[i], i);
+    }
+     return result;
+}
 /** _.extend
 * Arguments:
 *   1) An Object
@@ -362,6 +490,27 @@ _.indexOf = function(array, value) {
 *   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
+
+_.extend = function(object1, object2) {
+    let objects = Array.prototype.slice.call(arguments,1);
+       for (var i = 0; i < objects.length; i++) {
+        let currentObject = objects[i];
+        for ( var key in currentObject) {
+            if (currentObject.hasOwnProperty(key)) {
+                object1[key] = currentObject[key];
+            }
+        }
+       }
+       return object1;
+}
+
+
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
